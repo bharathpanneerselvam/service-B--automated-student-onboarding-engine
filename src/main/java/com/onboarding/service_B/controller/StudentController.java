@@ -15,12 +15,11 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentservice;
-    private final StudentRepository studentrepository;
+
 
     public StudentController(StudentService studentservice,
                              StudentRepository studentrepository) {
         this.studentservice = studentservice;
-        this.studentrepository = studentrepository;
     }
 
 
@@ -31,17 +30,29 @@ public class StudentController {
 
     @GetMapping
     public List<Student> getAllStudents() {
-        return studentrepository.findAll();
+        return studentservice.getAllStudents();
     }
 
     @GetMapping("/{studentId}")
     public Student getByStudentId(@PathVariable String studentId) {
-        return studentrepository.findByStudentId(studentId)
+        return studentservice.getByStudentId(studentId)
                 .orElse(null);
     }
 
     @GetMapping("/department/{dept}")
     public List<Student> getByDepartment(@PathVariable String dept) {
-        return studentrepository.findByDepartment(dept);
+        return studentservice.getByDepartment(dept);
+    }
+
+    @DeleteMapping("/{studentId}")
+    public String deleteByStudentId(@PathVariable String studentId) {
+        studentservice.deleteByStudentId(studentId);
+        return "Deleted student with ID: " + studentId;
+    }
+
+    @DeleteMapping
+    public String deleteAllStudents() {
+        studentservice.deleteAllStudents();
+        return "All students deleted";
     }
 }

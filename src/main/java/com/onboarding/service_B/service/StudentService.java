@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,16 @@ public class StudentService {
 
         return studentRepository.findByDepartment(dept);
     }
+
+    public void deleteByStudentId(String studentId) {
+        studentRepository.findByStudentId(studentId)
+                .ifPresent(studentRepository::delete);
+    }
+
+    public void deleteAllStudents() {
+        studentRepository.deleteAll();
+    }
+
     public BatchResponse processBatch(BatchRequest request) {
 
         List<StudentDTO> dtos = request.getStudents();
@@ -50,10 +61,10 @@ public class StudentService {
                     .build();
         }
 
-        int inserted = 0;
-        int updated = 0;
+        AtomicInteger inserted = new AtomicInteger(0);
+        AtomicInteger updated = new AtomicInteger(0);
 
-        for (StudentDTO dto : dtos) {
+        dtos.parallelStream().forEach(dto -> {
 
             Optional<Student> existing =
                     studentRepository.findByStudentId(dto.getStudentId());
@@ -62,18 +73,18 @@ public class StudentService {
                 Student student = existing.get();
                 studentMapper.mergeInto(dto, student);
                 studentRepository.save(student);
-                updated++;
+                updated.incrementAndGet();
             } else {
                 Student student = studentMapper.toEntity(dto);
                 studentRepository.save(student);
-                inserted++;
+                inserted.incrementAndGet();
             }
-        }
+        });
 
         return BatchResponse.builder()
                 .success(true)
-                .inserted(inserted)
-                .updated(updated)
+                .inserted(inserted.get())
+                .updated(updated.get())
                 .processedAt(LocalDateTime.now())
                 .message("Batch processed successfully")
                 .build();
