@@ -1,0 +1,12 @@
+com\onboarding\service_B\entity\Student.class
+com\onboarding\service_B\repository\StudentRepository.class
+com\onboarding\service_B\dto\BatchResponse.class
+com\onboarding\service_B\dto\BatchRequest$BatchRequestBuilder.class
+com\onboarding\service_B\controller\StudentController.class
+com\onboarding\service_B\service\StudentService.class
+com\onboarding\service_B\entity\Student$StudentBuilder.class
+com\onboarding\service_B\dto\BatchResponse$BatchResponseBuilder.class
+com\onboarding\service_B\ServiceBApplication.class
+com\onboarding\service_B\dto\StudentDTO.class
+com\onboarding\service_B\mapper\StudentMapper.class
+com\onboarding\service_B\dto\BatchRequest.class

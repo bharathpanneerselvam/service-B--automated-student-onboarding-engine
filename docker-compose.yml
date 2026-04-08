@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: 17Bharath@
+      MYSQL_DATABASE: students_db
+    ports:
+      - "3306:3306"
+
+  service-b:
+    build: .
+    container_name: service-b
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
