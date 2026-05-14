@@ -1,5 +1,5 @@
 package com.onboarding.service_B.controller;
-
+import org.springframework.web.bind.annotation.RequestMethod;
 import com.onboarding.service_B.dto.BatchRequest;
 import com.onboarding.service_B.dto.BatchResponse;
 import com.onboarding.service_B.entity.Student;
@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", methods = {
+        RequestMethod.GET,
+        RequestMethod.POST,
+        RequestMethod.DELETE,
+        RequestMethod.OPTIONS
+})
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
@@ -28,7 +34,8 @@ public class StudentController {
         return studentservice.processBatch(request);
     }
 
-    @GetMapping
+
+    @GetMapping("/list")
     public List<Student> getAllStudents() {
         return studentservice.getAllStudents();
     }
